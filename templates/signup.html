@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h2>📝 회원가입</h2>
+    <form action="/signup" method="POST">
+        <div class="input-group">
+            <label>이름</label>
+            <input type="text" name="name" placeholder="성함을 입력하세요" required>
+        </div>
+        <div class="input-group">
+            <label>아이디</label>
+            <input type="text" name="uid" placeholder="사용할 아이디 입력" required>
+        </div>
+        <div class="input-group">
+            <label>비밀번호</label>
+            <input type="password" name="pw" placeholder="비밀번호 설정" required>
+        </div>
+        <button type="submit">가입하기</button>
+    </form>
+</div>
+{% endblock %}

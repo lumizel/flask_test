@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>종합 관리 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 70px; } /* 네비바에 가려지지 않게 설정 */
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">MBC 시스템</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board">자유게시판</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/filesboard">자료실(파일게시판)</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="scoreDropdown" role="button" data-bs-toggle="dropdown">
+                            성적관리
+                        </a>
+                        <ul class="dropdown-menu shadow">
+                            {# 1. 모든 로그인 사용자가 볼 수 있는 메뉴 #}
+                            {% if session.get('user_id') %}
+                                <li><a class="dropdown-item" href="/score/my">내 성적 조회</a></li>
+                            {% endif %}
+
+                            {# 2. 관리자/매니저만 볼 수 있는 메뉴 #}
+                            {% if session.get('user_role') in ('admin', 'manager') %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><h6 class="dropdown-header">관리자 메뉴</h6></li>
+                                <li><a class="dropdown-item" href="/score/members">학생 성적 입력 (학생선택)</a></li>
+                                <li><a class="dropdown-item" href="/score/list">전체 성적 현황 (JOIN)</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if session.get('user_id') %}
+                        <li class="nav-item">
+                            <span class="nav-link text-white"><b>{{ session['user_name'] }}|{{ session['user_role']}}</b>님</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/mypage">마이페이지</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">로그아웃</a>
+                        </li>
+                    {% if session.get('user_role') == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link text-danger fw-bold" href="javascript:void(0);" onclick="confirmShutdown()">서버종료</a>
+                        </li>
+                    {% endif %}
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/signup">회원가입</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 본문 영역으로 다른 파일이 이 레이아웃을 겹쳐 보이게 처리하는 용도-->
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    function confirmShutdown() {
+        if (confirm("🚨 주의: 서버를 즉시 종료하시겠습니까?\n종료 후에는 직접 다시 실행해야 합니다.")) {
+            location.href = "{{ url_for('shutdown') }}";
+        }
+    }
+    </script>
+</body>
+</html>

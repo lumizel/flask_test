@@ -1,0 +1,22 @@
+{% extends 'layout.html' %} {# 레이아웃 파일명이 layout.html 일 경우 #}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h2>🔐 로그인</h2>
+    <form action="/login" method="POST">
+        <div class="input-group">
+            <label>아이디</label>
+            <input type="text" name="uid" placeholder="아이디를 입력하세요" required>
+        </div>
+        <div class="input-group">
+            <label>비밀번호</label>
+            <input type="password" name="pw" placeholder="비밀번호를 입력하세요" required>
+        </div>
+        <button type="submit">로그인</button>
+    </form>
+    <div class="footer-links">
+        아직 계정이 없으신가요? <a href="/join">회원가입</a>
+    </div>
+</div>
+{% endblock %}

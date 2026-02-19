@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h2>⚙️ 내 정보 수정</h2>
+    <form action="/member/edit" method="POST">
+        <div class="input-group">
+            <label>이름</label>
+            <input type="text" name="name" value="{{ session['user_name'] }}" required>
+        </div>
+        <div class="input-group">
+            <label>새 비밀번호</label>
+            <input type="password" name="pw" placeholder="변경할 경우에만 입력">
+        </div>
+        <button type="submit">수정 완료</button>
+    </form>
+
+    <form action="/delete" method="POST" onsubmit="return confirm('정말 탈퇴하시겠습니까?');">
+        <button type="submit" class="btn-delete">회원 탈퇴</button>
+    </form>
+</div>
+{% endblock %}
